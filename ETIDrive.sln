@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETIDrive_WebUI", "ETIDrive_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETIDrive_Entity", "ETIDrive_Entity\ETIDrive_Entity.csproj", "{060BFDBC-6D44-4134-97B7-C520E5CC1308}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETIDrive_Data", "ETIDrive_Data\ETIDrive_Data.csproj", "{B1F9928B-FE31-4A69-8136-53C21DD32239}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{060BFDBC-6D44-4134-97B7-C520E5CC1308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{060BFDBC-6D44-4134-97B7-C520E5CC1308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{060BFDBC-6D44-4134-97B7-C520E5CC1308}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F9928B-FE31-4A69-8136-53C21DD32239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1F9928B-FE31-4A69-8136-53C21DD32239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1F9928B-FE31-4A69-8136-53C21DD32239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1F9928B-FE31-4A69-8136-53C21DD32239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
