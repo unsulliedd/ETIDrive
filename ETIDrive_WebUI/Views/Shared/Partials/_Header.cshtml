@@ -43,10 +43,20 @@
                     <form class="navbar-search mx-1" asp-controller="#" asp-action="#">
                         <input name="q" type="search" class="form-control form-control-dark" placeholder="Search..."
                                aria-label="Search">
-                    </form>  
+                    </form> 
+                    @if(User.Identity == null)
+                    {
+                        <div class="btn btn-dark nav-item">
+                            <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Login</a>
+                        </div>
+                    };
+                    else{
                     <div class="btn btn-dark nav-item">
-                        <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Login</a>
+                        <a class="nav-link text-light" asp-controller="Account" asp-action="LogOut">LogOut</a>
                     </div>
+                    }
+                   
+
                 </div>
 
             </div>

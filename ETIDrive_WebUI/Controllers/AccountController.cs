@@ -12,6 +12,7 @@ namespace ETIDrive_WebUI.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private LdapConnection _ldapConnection;
 
         public AccountController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -42,25 +43,29 @@ namespace ETIDrive_WebUI.Controllers
             return View();
         }
 
-
         private bool ActiveDirectoryAuthentication(string username, string password)
         {
             try
             {
-                using (var ldapConnection = new LdapConnection(new LdapDirectoryIdentifier("ALIENWARE")))
-                {
-                    ldapConnection.SessionOptions.ProtocolVersion = 3;
-                    ldapConnection.AuthType = AuthType.Negotiate;
+                _ldapConnection = new LdapConnection(new LdapDirectoryIdentifier("ALIENWARE"));
+                _ldapConnection.SessionOptions.ProtocolVersion = 3;
+                _ldapConnection.AuthType = AuthType.Negotiate;
 
-                    ldapConnection.Bind(new NetworkCredential(username, password));
+                _ldapConnection.Bind(new NetworkCredential(username, password));
 
-                    return true;
-                }
+                return true;
             }
             catch
             {
                 return false;
             }
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            _ldapConnection?.Dispose();
+
+            return RedirectToAction("Index", "Home");
         }
 
     }
