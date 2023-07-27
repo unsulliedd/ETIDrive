@@ -12,7 +12,7 @@ namespace ETIDrive_WebUI.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private LdapConnection _ldapConnection;
+        private LdapConnection? _ldapConnection;
 
         public AccountController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -47,7 +47,7 @@ namespace ETIDrive_WebUI.Controllers
         {
             try
             {
-                _ldapConnection = new LdapConnection(new LdapDirectoryIdentifier("ALIENWARE"));
+                _ldapConnection = new LdapConnection(new LdapDirectoryIdentifier("ETIMADEN"));
                 _ldapConnection.SessionOptions.ProtocolVersion = 3;
                 _ldapConnection.AuthType = AuthType.Negotiate;
 
@@ -67,7 +67,5 @@ namespace ETIDrive_WebUI.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
     }
-
 }
