@@ -1,3 +1,4 @@
+using ETIDrive_Entity.Identity;
 using ETIDrive_Entity.Juction_Tables;
 
 namespace ETIDrive_Entity
@@ -15,5 +16,12 @@ namespace ETIDrive_Entity
         public Department? Department { get; set; }
         public List<UserFolder>? UserFolders { get; set; }
         public List<Data>? Datas { get; }
+
+        public required string CreatedById { get; set; }
+        public required User CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public required string ModifiedById { get; set; }
+        public required User ModifiedBy { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

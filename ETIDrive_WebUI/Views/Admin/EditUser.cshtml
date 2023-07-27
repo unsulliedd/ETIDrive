@@ -1,0 +1,28 @@
+﻿@model UserEditModel
+
+<h2>Edit User</h2>
+
+<form asp-action="EditUser" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    @foreach (var rolename in ViewBag.Roles)
+    {
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" name="selectedRoles" value="@rolename"
+                   id="@rolename" @(Model.SelectedRoles.Contains(rolename) ? "checked" : "")>
+            <label class="custom-control-label" for="@rolename">@rolename</label>
+        </div>
+    }
+    <button type="submit">Save Changes</button>
+</form>

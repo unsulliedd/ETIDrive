@@ -8,6 +8,6 @@ namespace ETIDrive_Entity
         public required string Name { get; set; }
         public int? FolderId { get; set; }
         public Folder? Folder { get; set; }
-        public List<User>? User { get; }
+        public List<User>? User { get; set; }
     }
 }

@@ -39,6 +39,7 @@ namespace ETIDrive_Data
                 .HasKey(fp => new { fp.Id, fp.DataId });
             modelBuilder.Entity<DataTag>()
                 .HasKey(ft => new { ft.DataId, ft.TagId });
+
             modelBuilder.Entity<Data>()
                 .HasOne(f => f.CreatedBy)
                 .WithMany(u => u.CreatedFiles)
@@ -48,6 +49,18 @@ namespace ETIDrive_Data
             modelBuilder.Entity<Data>()
                 .HasOne(f => f.ModifiedBy)
                 .WithMany(u => u.LastModifiedFiles)
+                .HasForeignKey(f => f.ModifiedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Folder>()
+                .HasOne(f => f.CreatedBy)
+                .WithMany(u => u.CreatedFolders)
+                .HasForeignKey(f => f.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Folder>()
+                .HasOne(f => f.ModifiedBy)
+                .WithMany(u => u.LastModifiedFolders)
                 .HasForeignKey(f => f.ModifiedById)
                 .OnDelete(DeleteBehavior.Restrict);
 

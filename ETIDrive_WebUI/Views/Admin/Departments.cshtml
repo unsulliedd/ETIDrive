@@ -1,0 +1,35 @@
+﻿@model List<DepartmentViewModel>
+
+<h2>Departments</h2>
+
+<a asp-action="CreateDepartment" class="btn btn-primary mb-2">Create Department</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Department Id</th>
+            <th>Name</th>
+            <th>Users</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <td>@department.DepartmentId</td>
+                <td>@department.Name</td>
+                <td>
+                    @foreach (var user in department.Users)
+                    {
+                        <div>@user.UserName</div>
+                    }
+                </td>
+                <td>
+                    <a asp-action="EditDepartment" asp-route-id="@department.DepartmentId" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-sm ml-2">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

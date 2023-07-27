@@ -1,0 +1,39 @@
+﻿@model DepartmentDetailModel
+
+<h1>Edit Department</h1>
+
+<h3>Department Information</h3>
+<form asp-action="EditDepartment" method="post">
+    <input type="hidden" asp-for="DepartmentId" />
+
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+
+    </div>
+
+    <h3>Members</h3>
+        <ul>
+            @foreach (var member in Model.Members)
+                {
+                    <li>
+                        @member.UserName (@member.DepartmentName)
+                        <input type="checkbox" name="IdsToDelete" value="@member.UserId" />
+                    </li>
+                }
+        </ul>
+
+        <h3>Non-Members</h3>
+        <ul>
+            @foreach (var nonmember in Model.NonMembersWithDepartment)
+            {
+                <li>
+                    @nonmember.UserName (@nonmember.DepartmentName)
+                    <input type="checkbox" name="IdsToAdd" value="@nonmember.UserId" />
+                </li>
+            }
+        </ul>
+
+        <button type="submit">Save Changes</button>
+</form>
