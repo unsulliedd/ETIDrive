@@ -13,10 +13,26 @@ builder.Services.AddControllersWithViews();
 // Configures ASP.NET Core Identity for the application with Entity Framework for data storage.
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ETIDriveContext>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 
 // Development connection string
 string path = Directory.GetCurrentDirectory();
 var connectionString = builder.Configuration.GetConnectionString("Development")?.Replace("[DataDirectory]", path);
+
+//Cookie
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/account/login";
+    options.LogoutPath = "/account/logout";
+    options.AccessDeniedPath = "/account/accessdenied";
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(61);
+    options.Cookie = new CookieBuilder
+    {
+        HttpOnly = true,
+        Name = ".ETIMaden.Account.Cookie"
+    };
+});
 
 // Using the SQL Server database with the provided connection string.
 builder.Services.AddDbContext<ETIDriveContext>(options =>
@@ -40,10 +56,17 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
+app.MapControllerRoute(
+    name: "createDepartment",
+    pattern: "{controller=Folder}/{action=CreateFolder}/{id?}");
 // Account Route
 app.MapControllerRoute(
     name: "login",
     pattern: "{controller=Account}/{action=Login}");
+// Folder Route
+app.MapControllerRoute(
+    name: "FodlerUserList",
+    pattern: "{controller=Folder}/{action=GetUserList}");
 // Admin Route
 app.MapControllerRoute(
     name: "adminpanel",

@@ -1,0 +1,45 @@
+﻿@model FolderCreationViewModel
+
+<div class="popup-modal" id="createFolderModal" style="display: none;">
+    <div class="popup-content">
+        <div class="popup-body">
+            <form asp-controller="Folder" asp-action="CreateFolder" method="post">
+                <div class="folder_create">
+                    <div class="folder_create_leftside">
+                        <h3>Create New Folder</h3>
+
+                        <div class="folder_create_name">
+                            <label>Folder Name:</label>
+                            <input type="text" asp-for="@Model.FolderName" placeholder="Folder Name" />
+                        </div>
+                        <div class="folder_create_description">
+                            <label>Folder Description</label>
+                            <textarea id="textid" type="textarea" placeholder="Folder Description" asp-for="@Model.FolderDescription">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="folder_create_rightside">
+                        <div>
+                            <h3>Permissions</h3>
+                            <div class="user_search">
+                                <input type="text" id="userSearch" placeholder="Search users..." />
+                                <select id="departmentFilter">
+                                    <option value="">All Departments</option>
+                                    @foreach (var department in ViewBag.Departments)
+                                    {
+                                        <option value="@department.DepartmentId">@department.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="user_list_container" id="userListContainer">
+                                <partial name="Partials/_UserListPartial" model = "Model.UserPermissions" />
+                            </div>
+                        </div>
+                    </div>
+                    <span class="close_button" onclick="closeModal()">&times;</span>
+                </div>
+                <button type="submit">Create Folder</button>
+            </form>
+        </div>
+    </div>
+</div>

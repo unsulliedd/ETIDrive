@@ -3,6 +3,7 @@ using ETIDrive_Entity;
 using ETIDrive_Entity.Identity;
 using ETIDrive_Entity.Juction_Tables;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace ETIDrive_Data.Concrete
 {
@@ -14,39 +15,34 @@ namespace ETIDrive_Data.Concrete
         {
             this.context = context;
         }
-        public async Task CreateFolderWithPermissions(Folder folder, List<User> usersWithPermissions, Folder? parentFolder = null)
+        public async Task CreateFolderWithPermissions(Folder folder, User user, int? parentFolderId = null)
         {
             context.Folders.Add(folder);
-            if (parentFolder != null)
-            {
-                folder.ParentFolderId = parentFolder.FolderId;
-            }
+            folder.ParentFolderId = parentFolderId;
+
             context.SaveChanges();
 
-            foreach (var user in usersWithPermissions)
+            var userFolder = new UserFolder
             {
-                var userFolder = new UserFolder
-                {
-                    User = user,
-                    Folder = folder,
-                    IsOwner = false,
-                    HasPermission = true,
-                    CanView = true,
-                    CanEdit = true,
-                    CanDelete = true,
-                    CanDownload = true,
-                    CanUpload = true
-                };
+                User = user,
+                Folder = folder,
+                FolderId = folder.FolderId,
+                HasPermission = true,
+                CanView = true,
+                CanEdit = true,
+                CanDelete = true,
+                CanDownload = true,
+                CanUpload = true,
+                IsOwner = true,
+            };
 
-                context.UserFolders.Add(userFolder);
-            }
-
+            context.UserFolders.Add(userFolder);
             await context.SaveChangesAsync();
         }
 
-        public async Task SetUserFolderPermissions(int folderId, string userId, bool canView, bool canEdit, bool canDelete, bool canDownload, bool canUpload)
+        public async Task SetUserFolderPermissions(Folder folder, User user, bool canView, bool canEdit, bool canDelete, bool canDownload, bool canUpload, bool isOwner, bool hasPermission)
         {
-            var userFolder = await context.UserFolders.FirstOrDefaultAsync(uf => uf.FolderId == folderId && uf.User.Id == userId);
+            var userFolder = await context.UserFolders.FirstOrDefaultAsync(uf => uf.Folder == folder && uf.User == user);
 
             if (userFolder != null)
             {
@@ -55,10 +51,28 @@ namespace ETIDrive_Data.Concrete
                 userFolder.CanDelete = canDelete;
                 userFolder.CanDownload = canDownload;
                 userFolder.CanUpload = canUpload;
-
-                context.UserFolders.Update(userFolder);
-                await context.SaveChangesAsync();
+                userFolder.IsOwner = isOwner;
+                userFolder.HasPermission = hasPermission;
             }
+            else
+            {
+                userFolder = new UserFolder
+                {
+                    User = user,
+                    Folder = folder,
+                    CanView = canView,
+                    CanEdit = canEdit,
+                    CanDelete = canDelete,
+                    CanDownload = canDownload,
+                    CanUpload = canUpload,
+                    IsOwner = isOwner,
+                    HasPermission = hasPermission,
+                };
+
+                context.UserFolders.Add(userFolder);
+            }
+
+            await context.SaveChangesAsync();
         }
 
         public async Task ModifyFolderPermissions(int folderId, List<User> users, bool canView, bool canEdit, bool canDelete, bool canDownload, bool canUpload)
@@ -269,14 +283,6 @@ namespace ETIDrive_Data.Concrete
             return await context.Folders
                 .Where(f => f.Name.Contains(searchKeyword) || f.FolderDescription.Contains(searchKeyword))
                 .ToListAsync();
-        }
-
-        public async Task LogFolderAccessHistory(int folderId, string userId)
-        {
-            // Implement logging of folder access history
-            // You can add a new table/entity to log folder access with folderId, userId, and timestamp
-            // Alternatively, update the Folder entity to store access history properties like LastAccessedAt and LastAccessedByUserId
-            // Depending on your application's requirements, you can customize this method accordingly.
         }
     }
 }

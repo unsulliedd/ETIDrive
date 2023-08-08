@@ -1,0 +1,153 @@
+﻿<div id="customContextMenu" style="display: none;">
+    <ul class="menuItems">
+        <li class="items" onclick="cutText()"><a href="#"> Cut </a></li>
+        <li class="items" onclick="copyText()"><a href="#"> Copy </a></li>
+        <li class="items" onclick="pasteText()"><a href="#"> Paste </a></li>
+        <li class="items" onclick="deleteText()"><a href="#"> Delete </a></li>
+        <li class="items" onclick="openModal()"><a href="#"> New Folder </a></li>
+        <li class="items" onclick="showProperties()"><a href="#"> Properties</a></li>
+    </ul>
+</div>
+
+@await Component.InvokeAsync("CreateFolder")
+
+<script>
+    function hideCustomContextMenu() {
+        var myContextMenu = document.getElementById('customContextMenu');
+        myContextMenu.style.display = "none";
+    }
+
+    function showCustomContextMenu(event) {
+        if (!event.shiftKey) {
+            event.preventDefault();
+        }
+        var myContextMenu = document.getElementById('customContextMenu');
+        var screenWidth = window.innerWidth;
+        var menuWidth = 160;
+        var menuX = event.pageX;
+
+        var screenHeight = window.innerHeight;
+        var menuHeight = 180;
+        var menuY = event.pageY;
+
+        if (menuY + menuHeight > screenHeight) {
+            myContextMenu.style.top = (menuY - menuHeight) + "px";
+        } else {
+            myContextMenu.style.top = menuY + "px";
+        }
+
+        if (menuX + menuWidth > screenWidth) {
+            myContextMenu.style.left = (menuX - menuWidth) + "px";
+        } else {
+            myContextMenu.style.left = menuX + "px";
+        }
+
+        myContextMenu.style.display = "block";
+    }
+    document.addEventListener("contextmenu", showCustomContextMenu);
+    document.addEventListener("click", function (event) {
+        var myContextMenu = document.getElementById('customContextMenu');
+        myContextMenu.style.display = "none";
+    });
+
+    ////////////////////////////////////////////////////////////
+
+    function cutText() {
+        var selectedText = window.getSelection().toString();
+        var activeElement = document.activeElement;
+
+        if (selectedText.length > 0) {
+            document.execCommand("copy");
+            document.execCommand("delete");
+        }
+    }
+
+    function copyText() {
+        var selectedText = window.getSelection().toString();
+        if (selectedText.length > 0) {
+            document.execCommand("copy");
+        }
+    }
+
+    function pasteText() {
+        navigator.clipboard.readText()
+            .then(text => {
+                var pasteTarget = document.activeElement;
+
+                if (pasteTarget.tagName == "INPUT" || pasteTarget.tagName == "TEXTAREA") {
+                    var startPosition = pasteTarget.selectionStart || 0;
+                    var endPosition = pasteTarget.selectionEnd || 0;
+                    var currentValue = pasteTarget.value || "";
+
+                    var newValue = currentValue.substring(0, startPosition) + text + currentValue.substring(endPosition);
+                    pasteTarget.value = newValue;
+
+                    alert("Pasted the text: " + text);
+                } else {
+                    console.error("Cannot paste text into this element.");
+                }
+            })
+            .catch(err => {
+                console.error('Failed to read clipboard contents: ', err);
+            });
+    }
+
+    function deleteText() {
+        var selectedText = window.getSelection().toString();
+        if (selectedText.length > 0) {
+            document.execCommand("delete");
+        }
+    }
+
+    function showProperties() {
+    }
+
+    function openModal() {
+        var modal = document.getElementById("createFolderModal");
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("createFolderModal");
+        modal.style.display = "none";
+    }
+
+    var createFolderButton = document.getElementById("createFolderButton");
+    createFolderButton.addEventListener("click", function () {
+        openModal();
+    });
+</script>
+
+<style>
+    #customContextMenu {
+        position: absolute;
+        background-color: dimgrey;
+        color: white;
+        height: 180px;
+        width: 160px;
+        text-align: left;
+        border-radius: 10px;
+        z-index: 100000;
+    }
+
+    .menuItems {
+        list-style: none;
+        font-size: 12px;
+        padding: 5px;
+        margin: 0;
+    }
+
+        .menuItems .items {
+            padding: 5px;
+            border-bottom: 1px solid white;
+        }
+
+            .menuItems .items:last-child {
+                border: none;
+            }
+
+            .menuItems .items a {
+                text-decoration: none;
+                color: white;
+            }
+</style>

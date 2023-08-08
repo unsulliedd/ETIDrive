@@ -10,14 +10,15 @@
                 <div class="signin-form">
                     <h2 class="my-3 text-dark">Login</h2>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <label class="user-label mt-2">Username</label>
                     <input class="user-input text-dark" asp-for="UserName" placeholder="Username" />
                     <span asp-validation-for="UserName" class="span-validation text-danger"></span>
+
                     <label class="user-label">Password</label>
                     <input class="user-input text-dark" asp-for="Password" placeholder="Password" />
                     <span asp-validation-for="Password" class="span-validation text-danger"></span>
                     
-
                     <input type="submit" value="Sign-in" class="usr-btn my-3" />
                 </div>
             </div>

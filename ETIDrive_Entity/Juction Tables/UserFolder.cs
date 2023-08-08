@@ -4,7 +4,7 @@ namespace ETIDrive_Entity.Juction_Tables
 {
     public class UserFolder
     {
-        public int Id { get; set; }
+        public string UserId { get; set; }
         public required User User { get; set; }
         public int FolderId { get; set; }
         public required Folder Folder { get; set; }

@@ -49,7 +49,9 @@
                         <div class="btn btn-dark nav-item">
                             <a class="nav-link text-light" asp-controller="Account" asp-action="LogOut">LogOut</a>
                         </div>
-
+                        <div>
+                            Welcome @User.Identity.Name
+                        </div>
                     }
                     else{
                         <div class="btn btn-dark nav-item">

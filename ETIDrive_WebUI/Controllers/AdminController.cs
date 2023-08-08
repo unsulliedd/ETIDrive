@@ -2,17 +2,20 @@
 using ETIDrive_Entity;
 using ETIDrive_Entity.Identity;
 using ETIDrive_WebUI.Models.AdminModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ETIDrive_WebUI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly IDepartmentRepository _departmentRepository;
+
         public AdminController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IDepartmentRepository departmentRepository)
         {
             _roleManager = roleManager;

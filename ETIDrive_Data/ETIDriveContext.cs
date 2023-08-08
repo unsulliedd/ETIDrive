@@ -1,12 +1,13 @@
 using ETIDrive_Entity;
 using ETIDrive_Entity.Identity;
 using ETIDrive_Entity.Juction_Tables;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ETIDrive_Data
 {
-    public class ETIDriveContext : IdentityDbContext<User>
+    public class ETIDriveContext : IdentityDbContext<User, IdentityRole, string>
     {
         public ETIDriveContext(DbContextOptions<ETIDriveContext> options) : base(options)
         {
@@ -34,7 +35,7 @@ namespace ETIDrive_Data
 
             // Configure the junction tables
             modelBuilder.Entity<UserFolder>()
-                .HasKey(uf => new { uf.Id, uf.FolderId });
+                .HasKey(uf => new { uf.UserId, uf.FolderId });
             modelBuilder.Entity<DataPermission>()
                 .HasKey(fp => new { fp.Id, fp.DataId });
             modelBuilder.Entity<DataTag>()

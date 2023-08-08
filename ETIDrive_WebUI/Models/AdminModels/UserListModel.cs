@@ -12,7 +12,7 @@ namespace ETIDrive_WebUI.Models.AdminModels
 
         [Required]
         public string Email { get; set; }
-        public IList<string> Roles { get; set; }
+        public IList<string>? Roles { get; set; }
     }
 
     public class UserEditModel
@@ -27,6 +27,6 @@ namespace ETIDrive_WebUI.Models.AdminModels
         [Required(ErrorMessage = "Please enter the email address.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
-        public List<string> SelectedRoles { get; set; }
+        public List<string>? SelectedRoles { get; set; }
     }
 }

@@ -130,6 +130,13 @@ namespace ETIDrive_Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FolderId"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
@@ -140,6 +147,13 @@ namespace ETIDrive_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -148,6 +162,10 @@ namespace ETIDrive_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FolderId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("ParentFolderId");
 
@@ -260,8 +278,8 @@ namespace ETIDrive_Data.Migrations
 
             modelBuilder.Entity("ETIDrive_Entity.Juction_Tables.UserFolder", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("FolderId")
                         .HasColumnType("int");
@@ -287,14 +305,9 @@ namespace ETIDrive_Data.Migrations
                     b.Property<bool>("IsOwner")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id", "FolderId");
+                    b.HasKey("UserId", "FolderId");
 
                     b.HasIndex("FolderId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserFolders");
                 });
@@ -494,9 +507,25 @@ namespace ETIDrive_Data.Migrations
 
             modelBuilder.Entity("ETIDrive_Entity.Folder", b =>
                 {
+                    b.HasOne("ETIDrive_Entity.Identity.User", "CreatedBy")
+                        .WithMany("CreatedFolders")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ETIDrive_Entity.Identity.User", "ModifiedBy")
+                        .WithMany("LastModifiedFolders")
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ETIDrive_Entity.Folder", "ParentFolder")
                         .WithMany("SubFolders")
                         .HasForeignKey("ParentFolderId");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("ModifiedBy");
 
                     b.Navigation("ParentFolder");
                 });
@@ -556,7 +585,9 @@ namespace ETIDrive_Data.Migrations
 
                     b.HasOne("ETIDrive_Entity.Identity.User", "User")
                         .WithMany("UserFolders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Folder");
 
@@ -646,9 +677,13 @@ namespace ETIDrive_Data.Migrations
                 {
                     b.Navigation("CreatedFiles");
 
+                    b.Navigation("CreatedFolders");
+
                     b.Navigation("FilePermissions");
 
                     b.Navigation("LastModifiedFiles");
+
+                    b.Navigation("LastModifiedFolders");
 
                     b.Navigation("UserFolders");
                 });
