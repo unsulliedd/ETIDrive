@@ -55,7 +55,7 @@ app.UseAuthorization();
 // Main Route
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Folder}/{action=UserFolder}");
 app.MapControllerRoute(
     name: "createDepartment",
     pattern: "{controller=Folder}/{action=CreateFolder}/{id?}");
@@ -63,10 +63,16 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "login",
     pattern: "{controller=Account}/{action=Login}");
+app.MapControllerRoute(
+    name: "accessDenied",
+    pattern: "{controller=Account}/{action=AccessDenied}");
 // Folder Route
 app.MapControllerRoute(
     name: "FodlerUserList",
     pattern: "{controller=Folder}/{action=GetUserList}");
+app.MapControllerRoute(
+    name: "folderContent",
+    pattern: "{controller=Folder}/{action=FolderContent}/{id?}");
 // Admin Route
 app.MapControllerRoute(
     name: "adminpanel",

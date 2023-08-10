@@ -1,0 +1,23 @@
+﻿@model FolderNavigationBarViewModel
+
+<ul class="folder_navigation">
+    <li>
+        <a id="goBackButton">
+            <i class="fa-solid fa-circle-chevron-left back_button"></i>
+        </a>
+    </li>
+
+    @if (Model != null)
+    {
+        @foreach (var parentFolder in Model.ParentFolders)
+        {
+            <li>
+                <a href="@Url.Action("FolderContent", "Folder", 
+                    new { folderId = parentFolder.FolderId })">
+                    @parentFolder.Name</a>
+                <i class="fa-solid fa-angles-right arrow"></i>
+            </li>
+        }
+        <li class="current_folder">@Model.CurrentFolder.Name</li>
+    }
+</ul>

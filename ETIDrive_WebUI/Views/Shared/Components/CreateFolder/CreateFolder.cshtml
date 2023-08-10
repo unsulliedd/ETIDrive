@@ -32,12 +32,13 @@
                                 </select>
                             </div>
                             <div class="user_list_container" id="userListContainer">
-                                <partial name="Partials/_UserListPartial" model = "Model.UserPermissions" />
+                                <partial name="Partials/_UserListPartial" model = "@Model.UserPermissions" />
                             </div>
                         </div>
                     </div>
                     <span class="close_button" onclick="closeModal()">&times;</span>
                 </div>
+                <input type="hidden" name="folderId" value="@ViewBag.CurrentFolderId" />
                 <button type="submit">Create Folder</button>
             </form>
         </div>

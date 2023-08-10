@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETIDrive_Entity", "ETIDrive
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETIDrive_Data", "ETIDrive_Data\ETIDrive_Data.csproj", "{B1F9928B-FE31-4A69-8136-53C21DD32239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETIDrive_xUnitTest", "ETIDrive_xUnitTest\ETIDrive_xUnitTest.csproj", "{D4968428-376B-47E7-9DA8-1B1E8CCDD886}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETIDrive_xUnitTest", "ETIDrive_xUnitTest\ETIDrive_xUnitTest.csproj", "{D4968428-376B-47E7-9DA8-1B1E8CCDD886}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

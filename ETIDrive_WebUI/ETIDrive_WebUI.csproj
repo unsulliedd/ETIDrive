@@ -19,8 +19,4 @@
     <ProjectReference Include="..\ETIDrive_Data\ETIDrive_Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\img\" />
-  </ItemGroup>
-
 </Project>

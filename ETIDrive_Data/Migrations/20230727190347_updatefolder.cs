@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ETIDrive_Data.Migrations
 {
     /// <inheritdoc />
-    public partial class updatefolder : Migration
+    public partial class Updatefolder : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

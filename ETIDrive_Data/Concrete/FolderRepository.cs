@@ -15,16 +15,23 @@ namespace ETIDrive_Data.Concrete
         {
             this.context = context;
         }
-        public async Task CreateFolderWithPermissions(Folder folder, User user, int? parentFolderId = null)
+        public async Task CreateFolderWithPermissions(Folder folder, User user, int? parentFolderId)
         {
             context.Folders.Add(folder);
             folder.ParentFolderId = parentFolderId;
+
+            if (parentFolderId.HasValue)
+            {
+                var parentFolder = await context.Folders.FirstOrDefaultAsync(f => f.FolderId == parentFolderId.Value);
+                parentFolder?.SubFolders.Add(folder);
+            }
 
             context.SaveChanges();
 
             var userFolder = new UserFolder
             {
                 User = user,
+                UserId = user.Id,
                 Folder = folder,
                 FolderId = folder.FolderId,
                 HasPermission = true,
@@ -95,11 +102,31 @@ namespace ETIDrive_Data.Concrete
 
             await context.SaveChangesAsync();
         }
+        public bool CheckUserFolderAccess(string userId, int folderId)
+        {
+            var folder = context.Folders
+                .Include(f => f.UserFolders)
+                .FirstOrDefault(f => f.FolderId == folderId);
 
-        public async Task<List<Folder>> GetUserCreatedFolders(string createdByUserId)
+            if (folder == null)
+            {
+                return false;
+            }
+
+            var userFolder = folder.UserFolders?.FirstOrDefault(uf => uf.UserId == userId);
+            if (userFolder == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public async Task<List<Folder>> GetUserCreatedFolders(string userId)
         {
             return await context.Folders
-                .Where(f => f.CreatedById == createdByUserId)
+                .Where(f => f.UserFolders.Any(f => f.User.Id == userId &&  f.IsOwner) && f.ParentFolder == null)
                 .ToListAsync();
         }
 
@@ -120,8 +147,6 @@ namespace ETIDrive_Data.Concrete
         public async Task<List<Data>> GetFilesInFolderAndSubfolders(int folderId)
         {
             var folder = await context.Folders
-                .Include(f => f.SubFolders)
-                .ThenInclude(sf => sf.SubFolders)
                 .Include(f => f.Datas)
                 .FirstOrDefaultAsync(f => f.FolderId == folderId);
 
@@ -266,10 +291,7 @@ namespace ETIDrive_Data.Concrete
                 var sourceParentFolder = await context.Folders
                     .FirstOrDefaultAsync(f => f.FolderId == sourceFolder.ParentFolderId.Value);
 
-                if (sourceParentFolder != null)
-                {
-                    sourceParentFolder.SubFolders.Remove(sourceFolder);
-                }
+                sourceParentFolder?.SubFolders.Remove(sourceFolder);
             }
 
             destinationFolder.SubFolders.Add(sourceFolder);

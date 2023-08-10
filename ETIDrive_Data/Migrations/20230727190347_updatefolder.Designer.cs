@@ -13,7 +13,7 @@ namespace ETIDrive_Data.Migrations
 {
     [DbContext(typeof(ETIDriveContext))]
     [Migration("20230727190347_updatefolder")]
-    partial class updatefolder
+    partial class Updatefolder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

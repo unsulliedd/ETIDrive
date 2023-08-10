@@ -12,15 +12,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var userPermission in Model)
+        @for (int i = 0; i < Model.Count; i++)
         {
             <tr class="user_item">
-                <td class="user_username">@userPermission.Username<input type="hidden" asp-for="@userPermission.UserId" /></td>
-                <td><input type="checkbox" asp-for="@userPermission.CanView" name="userPermissions[@userPermission.UserId].CanView" /></td>
-                <td><input type="checkbox" asp-for="@userPermission.CanEdit" name="userPermissions[@userPermission.UserId].CanEdit" /></td>
-                <td><input type="checkbox" asp-for="@userPermission.CanDelete" name="userPermissions[@userPermission.UserId].CanDelete" /></td>
-                <td><input type="checkbox" asp-for="@userPermission.CanDownload" name="userPermissions[@userPermission.UserId].CanDownload" /></td>
-                <td><input type="checkbox" asp-for="@userPermission.CanUpload" name="userPermissions[@userPermission.UserId].CanUpload" /></td>
+                <td class="user_username">
+                    <input type="hidden" name="UserPermissions[@i].UserId" value="@Model[i].UserId" />
+                    <input type="hidden" name="UserPermissions[@i].Username" value="@Model[i].Username" />
+                    @Model[i].Username
+                </td>
+                <td>
+                    <input type="checkbox" name="UserPermissions[@i].CanView" value="true" @(Model[i].CanView ? "checked" : "") data-user-id="@Model[i].UserId" data-type="view" />
+                </td>
+                <td>
+                    <input type="checkbox" name="UserPermissions[@i].CanEdit" value="true" @(Model[i].CanEdit ? "checked" : "") data-user-id="@Model[i].UserId" data-type="edit" />
+                </td>
+                <td>
+                    <input type="checkbox" name="UserPermissions[@i].CanDelete" value="true" @(Model[i].CanDelete ? "checked" : "") data-user-id="@Model[i].UserId" data-type="delete" />
+                </td>
+                <td>
+                    <input type="checkbox" name="UserPermissions[@i].CanUpload" value="true" @(Model[i].CanUpload ? "checked" : "") data-user-id="@Model[i].UserId" data-type="upload" />
+                </td>
+                <td>
+                    <input type="checkbox" name="UserPermissions[@i].CanDownload" value="true" @(Model[i].CanDownload ? "checked" : "") data-user-id="@Model[i].UserId" data-type="download" />
+                </td>
             </tr>
         }
     </tbody>

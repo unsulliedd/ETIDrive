@@ -7,7 +7,11 @@ function showDeleteModal(itemName, deleteUrl) {
     modal.find("#confirmDeleteButton").click(function () {
         window.location.href = deleteUrl;
     });
+
 }
+document.getElementById("goBackButton").addEventListener("click", function () {
+    window.history.back();
+});
 
 // Close Button Function
 $(".close-button").click(function () {
@@ -15,8 +19,26 @@ $(".close-button").click(function () {
 });
 
 $(document).ready(function () {
+    var userListLoaded = false;
+
+    function loadUserListOnce(selectedDepartmentId, pageIndex) {
+        if (!userListLoaded) {
+            updateUserList(selectedDepartmentId, pageIndex);
+            userListLoaded = true;
+        }
+    }
+
+    loadUserListOnce(null, 1);
+
     var userListContainer = $(".user_list_container");
     var userSearchInput = $("#userSearch");
+    var selectedCheckboxes = {
+        view: [],
+        edit: [],
+        delete: [],
+        upload: [],
+        download: []
+    };
 
     function filterUserList() {
         var searchKeyword = userSearchInput.val().toLowerCase();
@@ -38,6 +60,21 @@ $(document).ready(function () {
         filterUserList();
     });
 
+    userListContainer.on("change", "input[type='checkbox']", function () {
+        var checkbox = $(this);
+        var userId = checkbox.data("user-id");
+        var checkboxType = checkbox.data("type");
+
+        if (checkbox.prop("checked")) {
+            selectedCheckboxes[checkboxType].push(userId);
+        } else {
+            var indexToRemove = selectedCheckboxes[checkboxType].indexOf(userId);
+            if (indexToRemove !== -1) {
+                selectedCheckboxes[checkboxType].splice(indexToRemove, 1);
+            }
+        }
+    });
+
     function updateUserList(selectedDepartmentId, pageIndex = 1) {
         $.ajax({
             url: "/Folder/GetUserList",
@@ -46,14 +83,19 @@ $(document).ready(function () {
             success: function (data) {
                 userListContainer.html(data);
                 filterUserList();
+
+                for (var type in selectedCheckboxes) {
+                    for (var i = 0; i < selectedCheckboxes[type].length; i++) {
+                        var userId = selectedCheckboxes[type][i];
+                        $("input[type='checkbox'][data-user-id='" + userId + "'][data-type='" + type + "']").prop("checked", true);
+                    }
+                }
             },
             error: function () {
                 console.error("An error occurred while loading user list.");
             }
         });
     }
-
-    updateUserList(null, 1);
 
     $("#departmentFilter").on("change", function () {
         var selectedDepartmentId = $(this).val();

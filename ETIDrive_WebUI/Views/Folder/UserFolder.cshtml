@@ -1,0 +1,33 @@
+﻿@model UserFolderViewModel
+
+@{
+    ViewData["Title"] = $"{User.Identity.Name}'s Folder";
+}
+<div class="folder_list_title">
+        <span>
+            @User.Identity.Name's Folder
+        </span>
+</div>
+
+<div class="folder_list">
+    @if (Model.Folders.Count > 0)
+    {
+        @foreach (var folder in Model.Folders)
+        {
+            <div class="folder_card">
+                <div class="folder_icon">
+                    <a asp-action="FolderContent" asp-route-folderId="@folder.FolderId">
+                        <img src="~/img/onedrive_folder_icon.svg" />
+                    </a>
+                </div>
+                <div class="folder_details">
+                    <a asp-action="FolderContent" asp-route-folderId="@folder.FolderId">@folder.Name</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No folders created by the user.</p>
+    }
+</div>

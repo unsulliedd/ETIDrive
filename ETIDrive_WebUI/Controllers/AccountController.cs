@@ -41,7 +41,7 @@ namespace ETIDrive_WebUI.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, "Default");
                     }
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("UserFolder", "Folder");
                 }
             }
             else
@@ -78,6 +78,11 @@ namespace ETIDrive_WebUI.Controllers
             _ldapConnection?.Dispose();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model FolderSubFoldersViewModel
+
+<div class="folder_navigation_bar">
+    @await Component.InvokeAsync("FolderNavigationBar", new { folderId = ViewBag.FolderId })
+</div>
+
+<div class="folder_list">
+    @if (Model.Subfolders.Count > 0)
+    {
+        @foreach (var folder in Model.Subfolders)
+        {
+            <div class="folder_card">
+                <div class="folder_icon">
+                    <a asp-action="FolderContent" asp-route-folderId="@folder.FolderId">
+                        <img src="~/img/onedrive_folder_icon.svg" />
+                    </a>
+                </div>
+                <div class="folder_details">
+                    <a asp-action="FolderContent" asp-route-folderId="@folder.FolderId">@folder.Name</a>
+                </div>
+            </div>
+        }
+    }
+</div>

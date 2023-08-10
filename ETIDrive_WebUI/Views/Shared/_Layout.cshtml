@@ -1,22 +1,50 @@
-﻿<!DOCTYPE html>
+﻿@using ETIDrive_WebUI.ViewComponents;
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] - ETIDrive</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </head>
     <body>
         <header>
             <partial name="Partials/_Header" />
         </header>
-        <div class="container">
-            <main role="main" class="pb-3">
+    @{
+        bool isAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
+    }
+
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            <div class="d-flex">
+                @if (isAuthenticated && !Context.Request.Path.StartsWithSegments("/Admin"))
+                {
+                    <div class="filter_panel_wrapper">
+                        @await Component.InvokeAsync("FilterPanel")
+                    </div>
+                }
+                <div class="main_body">
+                    <div class="main_body_render">
+                        @RenderBody()
+                    </div>
+                </div>
+
+                @if (isAuthenticated && !Context.Request.Path.StartsWithSegments("/Admin"))
+                {
+                    <div class="properties_panel_wrapper">
+                    </div>
+                }
+            </div>
+            @if (isAuthenticated)
+            {
                 <partial name="Partials/_ContextMenu" />
-                @RenderBody()
-            </main>
-        </div>
+            }
+        </main>
+    </div>
+
         <footer>
             <partial name="Partials/_Footer" />
         </footer>
