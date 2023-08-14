@@ -19,8 +19,10 @@ $(".close-button").click(function () {
 });
 
 $(document).ready(function () {
-    var userListLoaded = false;
 
+    updateUserList(null, 1);
+
+    var userListLoaded = false;
     function loadUserListOnce(selectedDepartmentId, pageIndex) {
         if (!userListLoaded) {
             updateUserList(selectedDepartmentId, pageIndex);

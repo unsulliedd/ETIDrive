@@ -21,26 +21,21 @@ namespace ETIDrive_WebUI.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult CreateFolder()
-        {
-            var viewModel = new FolderCreationViewModel();
 
-            return View(viewModel);
-        }
- 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFolder(FolderCreationViewModel model, int? folderId)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            if (folderId.HasValue)
+            if (folderId.HasValue && currentUser !=null)
             {
+                var parentFolderPath = _folderRepository.GetbyId((int)folderId).FolderPath;
                 var newFolder = new Folder
                 {
                     Name = model.FolderName,
                     FolderDescription = model.FolderDescription,
-                    FolderPath = Path.Combine("ProjectFiles", model.FolderName),
+                    FolderPath = Path.Combine(parentFolderPath , model.FolderName),
                     CreatedById = currentUser.Id,
                     CreatedBy = currentUser,
                     CreatedAt = DateTime.Now,
@@ -58,7 +53,8 @@ namespace ETIDrive_WebUI.Controllers
 
                     if (userPermission.CanView || userPermission.CanEdit || userPermission.CanDelete || userPermission.CanDownload || userPermission.CanUpload)
                     {
-                        await _folderRepository.SetUserFolderPermissions(newFolder, user, userPermission.CanView, userPermission.CanEdit, userPermission.CanDelete, userPermission.CanDownload, userPermission.CanUpload, false, true);
+                        await _folderRepository.SetUserFolderPermissions(newFolder, user, userPermission.CanView, userPermission.CanEdit, userPermission.CanDelete, 
+                            userPermission.CanDownload, userPermission.CanUpload, false, true);
                     }
                 }
                 return RedirectToAction("FolderContent", new { folderId });
@@ -86,7 +82,8 @@ namespace ETIDrive_WebUI.Controllers
 
                     if (userPermission.CanView || userPermission.CanEdit || userPermission.CanDelete || userPermission.CanDownload || userPermission.CanUpload)
                     {
-                        await _folderRepository.SetUserFolderPermissions(newFolder, user, userPermission.CanView, userPermission.CanEdit, userPermission.CanDelete, userPermission.CanDownload, userPermission.CanUpload, false, true);
+                        await _folderRepository.SetUserFolderPermissions(newFolder, user, userPermission.CanView, userPermission.CanEdit, userPermission.CanDelete, 
+                            userPermission.CanDownload, userPermission.CanUpload, false, true);
                     }
                 }
                 return RedirectToAction("UserFolder", "Folder");
@@ -95,20 +92,21 @@ namespace ETIDrive_WebUI.Controllers
         public async Task<IActionResult> GetUserListAsync(int pageIndex = 1, int pageSize = 8, int? selectedDepartmentId = null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var query = _userManager.Users.Where(user => user.Id != currentUser.Id);
+            var users = _userManager.Users;
+            users = users.Where(user => user.Id != currentUser.Id);
 
             if (selectedDepartmentId.HasValue)
             {
-                query = query.Where(user => user.DepartmentId == selectedDepartmentId.Value);
+                users = users.Where(user => user.DepartmentId == selectedDepartmentId.Value);
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await users.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
             var startIndex = (pageIndex - 1) * pageSize;
             var endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
-            var pagedUsers = await query.Skip(startIndex).Take(pageSize).ToListAsync();
+            var pagedUsers = await users.Skip(startIndex).Take(pageSize).ToListAsync();
 
             ViewBag.TotalPages = totalPages;
             ViewBag.CurrentPage = pageIndex;
@@ -127,6 +125,7 @@ namespace ETIDrive_WebUI.Controllers
 
             return PartialView("Partials/_UserListPartial", model);
         }
+
         public async Task<IActionResult> UserFolder()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -139,6 +138,7 @@ namespace ETIDrive_WebUI.Controllers
             };
             return View(model);
         }
+
         public async Task<IActionResult> FolderContent(int folderId)
         {
             var currentUser = await _userManager.GetUserAsync(User);

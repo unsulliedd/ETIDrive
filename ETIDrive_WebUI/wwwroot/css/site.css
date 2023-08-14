@@ -15,7 +15,7 @@ body {
 }
 
 .main_body_render {
-    margin-top: 66px;
+    margin: 66px 0 30px 0;
     display: flex;
     flex-direction: column;
 }
@@ -38,13 +38,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 82vh;
+    min-height: 78vh;
     min-width: 204vh;
 }
 
 .login_main {
     padding: 20px;
-    background: rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
@@ -119,55 +119,137 @@ body {
 /*********** Filter Panel ***********/
 
 .filter_panel_wrapper {
-    width: 450px;
-    margin-right: 10px;
-    margin-top: 66px;
+    width: 360px;
+    margin: 66px 20px 30px 10px;
     background: rgba( 255, 255, 255, 0.8 );
     box-shadow: 6px 9px 20px 0px rgb(180 163 163 / 50%);
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
-    margin-left: 33px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .filter_panel {
-    width: 430px;
     display: flex;
-    position: fixed;
+    width: 340px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     flex-direction: column;
-    padding: 10px;
+    position: fixed;
+    margin-top: 10px;
 }
 
 .filter_panel_sections{
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
 }
 
 .filter_panel_search{
+    width: 100%;
     display: flex;
     flex-direction:column;
     margin-bottom:20px;
 }
 
-.filter_panel_categories{
-
+#MainSearch {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-.filter_panel_tags {
-
+.form-group {
+    margin-bottom: 15px;
 }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+filter_panel_select {
+    height: 50px !important;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-control option {
+    padding: 10px;
+}
+
+.filter_panel_search::before {
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 290px;
+    top: 32px;
+    color: #ccc;
+}
+
+.file-type-select,
+.tag-select {
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.tag-select {
+    height: 150px;
+    overflow-y: scroll;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.filter_btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position:inherit!important;
+    width:100%;
+}
+
+    .filter_btn:hover {
+        background-color: #0056b3;
+    }
 
 /************* Folder Navigation Bar *************/
 
 .folder_navigation_bar {
     display: flex;
     flex-direction: row;
-    width: 54.5%;
+    width: 916px;
     position: fixed;
     margin-bottom: 20px;
     padding: 10px;
     box-shadow: 6px 9px 20px 0px rgb(180 163 163 / 50%);
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
+    backdrop-filter: blur(5px);
 }
 
 .folder_navigation {
@@ -191,6 +273,7 @@ body {
 
             .folder_navigation li a:hover {
                 color: red;
+                font-weight: 500;
             }
 
         .folder_navigation li:last-child a {
@@ -227,13 +310,14 @@ body {
 .folder_list_title {
     display: flex;
     flex-direction: row;
-    width: 54.5%;
+    width: 916px;
     position: fixed;
     margin-bottom: 20px;
     padding: 10px;
     box-shadow: 6px 9px 20px 0px rgb(180 163 163 / 50%);
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
+    backdrop-filter: blur(5px);
 }
 
 .folder_list_title span {
@@ -243,7 +327,7 @@ body {
 
 .folder_list {
     display: grid;
-    grid-template-columns: repeat(6, 138px);
+    grid-template-columns: repeat(6, 136px);
     gap: 20px;
     margin-top: 60px;
 }
@@ -380,10 +464,6 @@ body {
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 16px;
-    }
-
-    .form-group select {
-        height: 150px;
     }
 
     .form-group button {

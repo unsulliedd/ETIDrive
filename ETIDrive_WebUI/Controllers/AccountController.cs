@@ -9,51 +9,55 @@ namespace ETIDrive_WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private LdapConnection? _ldapConnection;
 
-        public AccountController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _roleManager = roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
         }
         [HttpGet]
         public IActionResult Login()
         {
-            return View(new LoginModel ());
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            if (ActiveDirectoryAuthentication(model.UserName, model.Password))
+            if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
-
-                if (user != null)
+                if (ActiveDirectoryAuthentication(model.UserName, model.Password))
                 {
-                    await _signInManager.SignInAsync(user, false);
+                    var user = await _userManager.FindByNameAsync(model.UserName);
 
-                    var roles = await _userManager.GetRolesAsync(user);
-                    if (roles.Count == 0)
+                    if (user != null)
                     {
-                        await _userManager.AddToRoleAsync(user, "Default");
+                        var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, lockoutOnFailure: false);
+
+                        if (signInResult.Succeeded)
+                        {
+                            var roles = await _userManager.GetRolesAsync(user);
+                            if (roles.Count == 0)
+                            {
+                                await _userManager.AddToRoleAsync(user, "Default");
+                            }
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
-                    return RedirectToAction("UserFolder", "Folder");
+                }
+                else
+                {
+                    var username = "Admin";
+                    var user = await _userManager.FindByNameAsync(username);
+                    await _signInManager.SignInAsync(user, false);
                 }
             }
-            else
-            {
-                var username = "Admin";
-                var user = await _userManager.FindByNameAsync(username);
-                await _signInManager.SignInAsync(user, false);
-            }
-
-            //ModelState.AddModelError("", "Hatalı kullanıcı adı veya parola.");
-            return View();
+            ModelState.AddModelError("", "Hatalı kullanıcı adı veya parola.");
+            return View(model);
         }
+
 
         private bool ActiveDirectoryAuthentication(string username, string password)
         {
@@ -72,6 +76,7 @@ namespace ETIDrive_WebUI.Controllers
                 return false;
             }
         }
+
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();

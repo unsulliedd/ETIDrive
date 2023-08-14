@@ -1,13 +1,32 @@
-﻿<div class="filter_panel">
+﻿@model FilterViewModel
+
+<div class="filter_panel">
     <div class="filter_panel_sections">
         <div class="filter_panel_search">
             <input type="text" id="MainSearch" placeholder="Search Anything..." />
         </div>
-        <div class="filter_panel_categories">
-
-        </div>
-        <div class="filter_panel_tags">
-
-        </div>
+        <form method="get" asp-controller="Document" asp-action="FilteredDocuments">
+            <div class="form-group filter_panel_form_group">
+                <label for="fileType">File Type:</label>
+                <select id="fileType" name="fileType" class="filter-select">
+                    <option value="">All Types</option>
+                    @foreach (var fileType in Model.FileTypes)
+                    {
+                        <option value="@fileType.Name">@fileType.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tag">Tag:</label>
+                <select id="tag" name="tag" class="filter-select filter_panel_select">
+                    <option value="">All Tags</option>
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <option value="@tag">@tag</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn filter_btn">Apply Filters</button>
+        </form>
     </div>
 </div>

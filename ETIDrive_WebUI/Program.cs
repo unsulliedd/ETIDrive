@@ -14,7 +14,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ETIDriveContext>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
-
+builder.Services.AddScoped<IDataRepository, DataRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Development connection string
 string path = Directory.GetCurrentDirectory();
 var connectionString = builder.Configuration.GetConnectionString("Development")?.Replace("[DataDirectory]", path);
@@ -56,9 +57,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Folder}/{action=UserFolder}");
-app.MapControllerRoute(
-    name: "createDepartment",
-    pattern: "{controller=Folder}/{action=CreateFolder}/{id?}");
 // Account Route
 app.MapControllerRoute(
     name: "login",
@@ -67,9 +65,6 @@ app.MapControllerRoute(
     name: "accessDenied",
     pattern: "{controller=Account}/{action=AccessDenied}");
 // Folder Route
-app.MapControllerRoute(
-    name: "FodlerUserList",
-    pattern: "{controller=Folder}/{action=GetUserList}");
 app.MapControllerRoute(
     name: "folderContent",
     pattern: "{controller=Folder}/{action=FolderContent}/{id?}");

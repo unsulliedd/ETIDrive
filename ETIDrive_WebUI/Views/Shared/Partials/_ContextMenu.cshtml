@@ -9,8 +9,9 @@
     </ul>
 </div>
 
-@await Component.InvokeAsync("CreateFolder")
-
+<div id="viewComponentContainer">
+    @await Component.InvokeAsync("CreateFolder")
+</div>
 <script>
     function hideCustomContextMenu() {
         var myContextMenu = document.getElementById('customContextMenu');

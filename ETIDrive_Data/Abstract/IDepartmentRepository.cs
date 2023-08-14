@@ -8,7 +8,7 @@ namespace ETIDrive_Data.Abstract
         void AddUserToDepartment(User user, Department department);
         void RemoveUserFromDepartment(User user, int departmentId);
         Task<List<User>> GetUserbyDepartment(int departmentId);
-        Task<Folder>? GetDepartmentFolder(int departmentId);
+        Task<Folder?> GetDepartmentFolder(int departmentId);
         bool IsInDepartment(string userId, int departmentId);
     }
 }

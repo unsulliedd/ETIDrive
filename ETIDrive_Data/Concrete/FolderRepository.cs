@@ -26,8 +26,6 @@ namespace ETIDrive_Data.Concrete
                 parentFolder?.SubFolders.Add(folder);
             }
 
-            context.SaveChanges();
-
             var userFolder = new UserFolder
             {
                 User = user,
@@ -121,7 +119,6 @@ namespace ETIDrive_Data.Concrete
 
             return true;
         }
-
 
         public async Task<List<Folder>> GetUserCreatedFolders(string userId)
         {

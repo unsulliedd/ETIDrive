@@ -34,7 +34,7 @@ namespace ETIDrive_Data.Concrete
                 .ToListAsync();
         }
 
-        public async Task<Folder> GetDepartmentFolder(int departmentId)
+        public async Task<Folder?> GetDepartmentFolder(int departmentId)
         {
             return await context.Departments
                 .Where(d => d.DepartmentId == departmentId)
